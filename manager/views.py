@@ -12,9 +12,17 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Task
 from .serializer import TaskSerializer
 
+
 class TaskView(
-    ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+    ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 ):
     permission_classes = (IsAuthenticated,)
     model = Task
     serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user).order_by("-created")
+
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
+    

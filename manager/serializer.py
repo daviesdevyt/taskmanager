@@ -3,6 +3,8 @@ from .models import Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(read_only=True)
     class Meta:
         model = Task
-        fields = "__all__"
+        fields = ["title", "description", "due_date", "status", "created"]
+
