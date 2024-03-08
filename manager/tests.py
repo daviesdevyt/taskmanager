@@ -10,7 +10,7 @@ class TaskViewTestCase(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='12345')
         self.task = Task.objects.create(user=self.user, title='Test Task', description='Test Description')
-        self.url = "/task/"
+        self.url = "/api/tasks/"
 
     def test_task_list(self):
         self.client.login(username='testuser', password='12345')
@@ -24,10 +24,10 @@ class TaskViewTestCase(TestCase):
 
     def test_task_update(self):
         self.client.login(username='testuser', password='12345')
-        response = self.client.patch(f"/task/{self.task.id}/", {'title': 'Updated Task', 'status': 'completed'}, content_type='application/json')
+        response = self.client.patch(f"/api/task/{self.task.id}/", {'title': 'Updated Task', 'status': 'completed'}, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_task_delete(self):
         self.client.login(username='testuser', password='12345')
-        response = self.client.delete(f"/task/{self.task.id}/")
+        response = self.client.delete(f"/api/task/{self.task.id}/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
