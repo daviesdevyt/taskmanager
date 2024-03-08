@@ -13,6 +13,8 @@ class RegisterView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
+        if User.objects.filter(username=username).exists():
+            return Response({"message": "Username already exists"}, status=400)
         User.objects.create_user(username=username, password=password)
         return Response({"message": "User created"}, status=201)
 
